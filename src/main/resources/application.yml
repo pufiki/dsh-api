@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    name: pufikidb
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    root: info
+
+
+
+---
+spring:
+  profiles: prod
+
+  datasource:
+    url: jdbc:postgres://mxsrggfskrvxrc:59479938eb7dadb568f51759295386733b19d5ddd4beba0c4fba5ec518ccdd14@ec2-23-21-106-241.compute-1.amazonaws.com:5432/da4o5ldnta7l55
+    username: pufik
+    password: pufikpass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+
+
+logging:
+  level:
+    ru.digitalsuperhero.dshapi: info
+    root: warn
