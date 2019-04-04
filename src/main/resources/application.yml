@@ -1,14 +1,22 @@
+security:
+  user:
+    name: pufik
+    password: pufikpass
+
 spring:
   datasource:
     name: pufikidb
+#    username: pufik
+#    password: pufikpass
   jpa:
     show-sql: true
+  data:
+    rest:
+      base-path: /api
 
 logging:
   level:
     root: info
-
-
 
 ---
 spring:
