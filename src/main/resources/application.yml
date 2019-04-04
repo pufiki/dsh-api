@@ -6,8 +6,8 @@ security:
 spring:
   datasource:
     name: pufikidb
-#    username: pufik
-#    password: pufikpass
+  #    username: pufik
+  #    password: pufikpass
   jpa:
     show-sql: true
   data:
@@ -23,13 +23,26 @@ spring:
   profiles: prod
 
   datasource:
-    url: jdbc:postgres://mxsrggfskrvxrc:59479938eb7dadb568f51759295386733b19d5ddd4beba0c4fba5ec518ccdd14@ec2-23-21-106-241.compute-1.amazonaws.com:5432/da4o5ldnta7l55
-    username: pufik
-    password: pufikpass
+    url: jdbc:postgresql://ec2-50-17-246-114.compute-1.amazonaws.com:5432/d9tnf8ll5pss9c
+    username: topvkufwauqnow
+    password: 2d3cc60efb4eb3d21af969c65044409f146850c780f16261fac481408e23a6cb
     driver-class-name: org.postgresql.Driver
+    platform: postgres
+    maxIdle: 5
+    minIdle: 2
+    initialSize: 5
+    maxActive: 10
+    removeAbandoned: true
 
   jpa:
+    database: POSTGRESQL
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+    hibernate:
+      ddl-auto: update
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: create-drop
 
 
 logging:
