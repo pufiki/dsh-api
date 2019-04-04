@@ -11,6 +11,7 @@ import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 
 @RestController
 @RequestMapping("/register")
+@CrossOrigin(origins="*")
 public class RegistrationController {
 
     private CustomerRepository customerRepo;
