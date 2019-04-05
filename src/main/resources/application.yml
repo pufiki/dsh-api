@@ -12,7 +12,7 @@ spring:
     show-sql: true
   data:
     rest:
-      base-path: /api
+      base-path: /restapi
 
 logging:
   level:

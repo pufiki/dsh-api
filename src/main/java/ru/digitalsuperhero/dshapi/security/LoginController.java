@@ -11,7 +11,7 @@ import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 
 @RestController
 @RequestMapping("/login")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class LoginController {
 
     private CustomerRepository customerRepo;
@@ -26,20 +26,19 @@ public class LoginController {
     }
 
     @GetMapping(path = "/customer", consumes = "application/json", produces = "application/json")
-//    @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<Customer> login(@RequestBody Customer customer) {
         Customer customerFound = customerRepo.findByEmail(customer.getUsername());
         if (customerFound != null && passwordEncoder.matches(customer.getPassword(), customerFound.getPassword())) {
-            return new ResponseEntity<>(customer, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(customerFound, HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>(customerFound, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(customer, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(path = "/contractor", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Contractor> login(@RequestBody Contractor contractor) {
         Contractor contractorFound = contractorRepo.findByEmail(contractor.getUsername());
         if (contractorFound != null && passwordEncoder.matches(contractor.getPassword(), contractorFound.getPassword())) {
-            return new ResponseEntity<>(contractor, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(contractorFound, HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(contractor, HttpStatus.NOT_FOUND);
     }

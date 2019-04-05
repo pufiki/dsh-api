@@ -2,6 +2,7 @@ package ru.digitalsuperhero.dshapi.security;
 
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.digitalsuperhero.dshapi.dao.ContractorRepository;
@@ -11,7 +12,7 @@ import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 
 @RestController
 @RequestMapping("/register")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class RegistrationController {
 
     private CustomerRepository customerRepo;
@@ -26,16 +27,22 @@ public class RegistrationController {
     }
 
     @PostMapping(path = "/contractor", consumes = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Contractor processRegistration(@RequestBody Contractor contractor) {
+    public ResponseEntity<Contractor> processRegistration(@RequestBody Contractor contractor) {
         contractor.setPassword(passwordEncoder.encode(contractor.getPassword()));
-        return contractorRepo.save(contractor);
+        Contractor foundContractor = contractorRepo.findByEmail(contractor.getEmail());
+        if (foundContractor == null) {
+            return new ResponseEntity<>(contractorRepo.save(contractor), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(foundContractor, HttpStatus.CONFLICT);
     }
 
     @PostMapping(path = "/customer", consumes = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Customer processRegistration(@RequestBody Customer customer) {
+    public ResponseEntity<Customer> processRegistration(@RequestBody Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-        return customerRepo.save(customer);
+        Customer foundCustomer = customerRepo.findByEmail(customer.getEmail());
+        if (foundCustomer == null) {
+            return new ResponseEntity<>(customerRepo.save(customer), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(foundCustomer, HttpStatus.CONFLICT);
     }
 }

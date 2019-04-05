@@ -1,6 +1,8 @@
 package ru.digitalsuperhero.dshapi.dao.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,10 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table
+@RestResource(rel = "contractors", path = "contractors")
 public class Contractor implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +25,20 @@ public class Contractor implements UserDetails {
     private String email;
     private String password;
     private String specialization;
+    @OneToMany(targetEntity = CommercialOffer.class)
+    private List<CommercialOffer> commercialOffers;
+    /**
+     * Contractor rating based on proposed and executed commercial offers.
+     */
+    private Double rating;
+
+    public Contractor(Long id, String companyName, String email, String password, String specialization) {
+        this.id = id;
+        this.companyName = companyName;
+        this.email = email;
+        this.password = password;
+        this.specialization = specialization;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
