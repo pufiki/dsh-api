@@ -24,20 +24,20 @@ public class Contractor implements UserDetails {
     private String companyName;
     private String email;
     private String password;
-    private String specialization;
+    private WorkSpecialization workSpecialization;
     @OneToMany(targetEntity = CommercialOffer.class)
     private List<CommercialOffer> commercialOffers;
     /**
-     * Contractor rating based on proposed and executed commercial offers.
+     * Contractor rating stars from 1.0 to 5.0 based on proposed and executed commercial offers.
      */
     private Double rating;
 
-    public Contractor(Long id, String companyName, String email, String password, String specialization) {
+    public Contractor(Long id, String companyName, String email, String password, WorkSpecialization workSpecialization) {
         this.id = id;
         this.companyName = companyName;
         this.email = email;
         this.password = password;
-        this.specialization = specialization;
+        this.workSpecialization = workSpecialization;
     }
 
     @Override

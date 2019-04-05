@@ -5,5 +5,5 @@ import ru.digitalsuperhero.dshapi.dao.domain.Contractor;
 import ru.digitalsuperhero.dshapi.dao.domain.WorkRequest;
 
 public interface WorkRequestRepository extends PagingAndSortingRepository<WorkRequest, Long> {
-    Contractor findByName(String name);
+    WorkRequest findByName(String name);
 }

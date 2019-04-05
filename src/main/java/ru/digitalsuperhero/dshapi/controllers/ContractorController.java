@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.digitalsuperhero.dshapi.dao.ContractorRepository;
 import ru.digitalsuperhero.dshapi.dao.domain.Contractor;
@@ -36,6 +37,35 @@ public class ContractorController {
                 linkTo(methodOn(CustomerController.class).getCustomers())
                         .withRel("recents"));
         return recentResources;
+    }
+
+    @PutMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Contractor> putContractor(@PathVariable("id") Long id, @RequestBody Contractor contractor) {
+        Contractor foundContractor = contractorRepository.findById(id).get();
+        contractorRepository.delete(foundContractor);
+        contractor.setId(id);
+        return new ResponseEntity<>(contractorRepository.save(contractor), HttpStatus.ACCEPTED);
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Contractor> patchContractor(@PathVariable("id") Long id, @RequestBody Contractor contractor) {
+        Contractor foundContractor = contractorRepository.findById(id).get();
+        if (contractor.getPassword() != null) {
+            foundContractor.setPassword(contractor.getPassword());
+        }
+        if (contractor.getEmail() != null) {
+            foundContractor.setEmail(contractor.getEmail());
+        }
+        if (contractor.getCompanyName() != null) {
+            foundContractor.setCompanyName(contractor.getCompanyName());
+        }
+        if (contractor.getWorkSpecialization() != null) {
+            foundContractor.setWorkSpecialization(contractor.getWorkSpecialization());
+        }
+        if (contractor.getCommercialOffers() != null) {
+            foundContractor.setCommercialOffers(contractor.getCommercialOffers());
+        }
+        return new ResponseEntity<>(contractorRepository.save(foundContractor), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.digitalsuperhero.dshapi.dao.CustomerRepository;
 import ru.digitalsuperhero.dshapi.dao.domain.Customer;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RepositoryRestController
 @CrossOrigin(origins = "*") //?
+@RestController
 public class CustomerController {
     private CustomerRepository customerRepository;
 
@@ -38,20 +40,16 @@ public class CustomerController {
         return recentResources;
     }
 
-    @PutMapping(path = "customers/{id}", consumes = "application/json")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Customer putCustomer(@PathVariable("id") Long id, @RequestBody Customer customer) {
-        //TODO: fix
+    @PutMapping(path = "customers/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Customer> putCustomer(@PathVariable("id") Long id, @RequestBody Customer customer) {
         Customer foundCustomer = customerRepository.findById(id).get();
-        customerRepository.delete(customer);
+        customerRepository.delete(foundCustomer);
         customer.setId(id);
-        return customerRepository.save(customer);
+        return new ResponseEntity<>(customerRepository.save(customer), HttpStatus.ACCEPTED);
     }
 
-    @PatchMapping(path = "customers/{id}", consumes = "application/json")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Customer patchCustomer(@PathVariable("id") Long id, @RequestBody Customer customerPatch) {
-        //TODO: fix
+    @PatchMapping(path = "customers/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Customer> patchCustomer(@PathVariable("id") Long id, @RequestBody Customer customerPatch) {
         Customer foundCustomer = customerRepository.findById(id).get();
         if (customerPatch.getPassword() != null) {
             foundCustomer.setPassword(customerPatch.getPassword());
@@ -65,7 +63,7 @@ public class CustomerController {
         if (customerPatch.getWorkRequestsCreated() != null) {
             foundCustomer.setWorkRequestsCreated(customerPatch.getWorkRequestsCreated());
         }
-        return customerRepository.save(foundCustomer);
+        return new ResponseEntity<>(customerRepository.save(foundCustomer), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(path = "customers/{id}")
