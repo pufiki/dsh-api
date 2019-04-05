@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -38,6 +39,12 @@ public class Customer implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+    }
+
+    public List<String> getRoles() {
+        List<String> roles = new LinkedList<>();
+        getAuthorities().stream().forEach(authority -> roles.add(((GrantedAuthority) ((GrantedAuthority) authority)).toString()));
+        return roles;
     }
 
     @Override
