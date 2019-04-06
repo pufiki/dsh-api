@@ -72,7 +72,7 @@ public class LoginController {
         );
         ResponseEntity<Map<Object, Object>> responseEntity = new ResponseEntity(model, HttpStatus.OK);
         responseEntity.getHeaders().set("Access-Control-Allow-Origin", "*");
-        responseEntity.getHeaders().set("Access-Control-Allow-Methods", "POST");
+        responseEntity.getHeaders().set("Access-Control-Allow-Methods", "GET");
         responseEntity.getHeaders().set("Access-Control-Max-Age", "3600");
         responseEntity.getHeaders().set("Access-Control-Allow-Headers",
                 "Access-Control-Allow-Headers, " +
@@ -110,13 +110,32 @@ public class LoginController {
         String username = admin.getUsername();
         String password = admin.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        ResponseEntity<Admin> responseEntity;
         Admin foundAdmin = adminRepository.findByUsername(username);
         if (foundAdmin != null) {
             String token = jwtTokenProvider.createToken(username, adminRepository.findByUsername(username).getRoles());
             AdminAuthenticatedResponse contractorAuthenticatedResponse = new AdminAuthenticatedResponse(foundAdmin, token);
-            return new ResponseEntity<>(contractorAuthenticatedResponse, HttpStatus.ACCEPTED);
+            responseEntity = new ResponseEntity<>(contractorAuthenticatedResponse, HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(admin, HttpStatus.NOT_FOUND);
+            responseEntity = new ResponseEntity<>(admin, HttpStatus.NOT_FOUND);
         }
+        responseEntity.getHeaders().set("Access-Control-Allow-Origin", "*");
+        responseEntity.getHeaders().set("Access-Control-Allow-Methods", "POST");
+        responseEntity.getHeaders().set("Access-Control-Max-Age", "3600");
+        responseEntity.getHeaders().set("Access-Control-Allow-Headers",
+                "Access-Control-Allow-Headers, " +
+                        "Access-Control-Allow-Origin, " +
+                        "Access-Content-Allow-Origin, " +
+                        "Access-Control-Allow-Credentials, " +
+                        "Access-Control-Allow-Methods, " +
+                        "x-requested-with, " +
+                        "authorization, " +
+                        "Content-Type, " +
+                        "Authorization, " +
+                        "credential, " +
+                        "X-XSRF-TOKEN, " +
+                        "responseType");
+        responseEntity.getHeaders().set("Access-Control-Allow-Credentials", "true");
+        return responseEntity;
     }
 }
