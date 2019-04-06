@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/login")
@@ -71,7 +70,25 @@ public class LoginController {
                 .map(a -> ((GrantedAuthority) a).getAuthority())
                 .collect(toList())
         );
-        return ok(model);
+        ResponseEntity<Map<Object, Object>> responseEntity = new ResponseEntity(model, HttpStatus.OK);
+        responseEntity.getHeaders().set("Access-Control-Allow-Origin", "*");
+        responseEntity.getHeaders().set("Access-Control-Allow-Methods", "POST");
+        responseEntity.getHeaders().set("Access-Control-Max-Age", "3600");
+        responseEntity.getHeaders().set("Access-Control-Allow-Headers",
+                "Access-Control-Allow-Headers, " +
+                        "Access-Control-Allow-Origin, " +
+                        "Access-Content-Allow-Origin, " +
+                        "Access-Control-Allow-Credentials, " +
+                        "Access-Control-Allow-Methods, " +
+                        "x-requested-with, " +
+                        "authorization, " +
+                        "Content-Type, " +
+                        "Authorization, " +
+                        "credential, " +
+                        "X-XSRF-TOKEN, " +
+                        "responseType");
+        responseEntity.getHeaders().set("Access-Control-Allow-Credentials", "true");
+        return responseEntity;
     }
 
     @PostMapping(path = "/contractor", consumes = "application/json", produces = "application/json")
