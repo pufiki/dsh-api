@@ -43,7 +43,7 @@ public class Customer implements UserDetails {
 
     public List<String> getRoles() {
         List<String> roles = new LinkedList<>();
-        getAuthorities().stream().forEach(authority -> roles.add(((GrantedAuthority) ((GrantedAuthority) authority)).toString()));
+        getAuthorities().stream().forEach(authority -> roles.add(((GrantedAuthority) authority).toString()));
         return roles;
     }
 

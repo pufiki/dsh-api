@@ -33,9 +33,6 @@ public class LoginController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    private ContractorRepository contractorRepository;
-
     private CustomerRepository customerRepo;
     private ContractorRepository contractorRepo;
     private PasswordEncoder passwordEncoder;
@@ -61,24 +58,29 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/me")
-    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        Map<Object, Object> model = new HashMap<>();
-        model.put("username", userDetails.getUsername());
-        model.put("roles", userDetails.getAuthorities()
-                .stream()
-                .map(a -> ((GrantedAuthority) a).getAuthority())
-                .collect(toList())
-        );
-        return ok(model);
-    }
+//    @GetMapping("/me")
+//    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+//        Map<Object, Object> model = new HashMap<>();
+//        model.put("username", userDetails.getUsername());
+//        model.put("roles", userDetails.getAuthorities()
+//                .stream()
+//                .map(a -> ((GrantedAuthority) a).getAuthority())
+//                .collect(toList())
+//        );
+//        return ok(model);
+//    }
 
     @GetMapping(path = "/contractor", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Contractor> login(@RequestBody Contractor contractor) {
-        Contractor contractorFound = contractorRepo.findByEmail(contractor.getUsername());
-        if (contractorFound != null && passwordEncoder.matches(contractor.getPassword(), contractorFound.getPassword())) {
-            return new ResponseEntity<>(contractorFound, HttpStatus.ACCEPTED);
+        String username = contractor.getEmail();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(contractor.getEmail(), contractor.getPassword()));
+        Contractor foundContractor = contractorRepo.findByEmail(username);
+        if (foundContractor != null) {
+            String token = jwtTokenProvider.createToken(username, contractorRepo.findByEmail(username).getRoles());
+            ContractorAuthenticatedResponse contractorAuthenticatedResponse = new ContractorAuthenticatedResponse(foundContractor, token);
+            return new ResponseEntity<>(contractorAuthenticatedResponse, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(contractor, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(contractor, HttpStatus.NOT_FOUND);
     }
 }
