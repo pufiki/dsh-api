@@ -10,8 +10,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import ru.digitalsuperhero.dshapi.dao.AdminRepository;
 import ru.digitalsuperhero.dshapi.dao.ContractorRepository;
 import ru.digitalsuperhero.dshapi.dao.CustomerRepository;
+import ru.digitalsuperhero.dshapi.dao.domain.Admin;
 import ru.digitalsuperhero.dshapi.dao.domain.Contractor;
 import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 import ru.digitalsuperhero.dshapi.security.jwt.JwtTokenProvider;
@@ -36,16 +38,18 @@ public class LoginController {
     private CustomerRepository customerRepo;
     private ContractorRepository contractorRepo;
     private PasswordEncoder passwordEncoder;
+    private AdminRepository adminRepository;
 
     public LoginController(
-            CustomerRepository customerRepo, ContractorRepository contractorRepo, PasswordEncoder passwordEncoder) {
+            CustomerRepository customerRepo, ContractorRepository contractorRepo, PasswordEncoder passwordEncoder, AdminRepository adminRepository) {
         this.customerRepo = customerRepo;
         this.contractorRepo = contractorRepo;
         this.passwordEncoder = passwordEncoder;
+        this.adminRepository = adminRepository;
     }
 
     @GetMapping(path = "/customer", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Customer> login(@RequestBody Customer customerAuthenticationRequest) {
+    public ResponseEntity<Customer> loginCustomer(@RequestBody Customer customerAuthenticationRequest) {
         String username = customerAuthenticationRequest.getEmail();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(customerAuthenticationRequest.getEmail(), customerAuthenticationRequest.getPassword()));
         Customer foundCustomer = customerRepo.findByEmail(username);
@@ -58,17 +62,17 @@ public class LoginController {
         }
     }
 
-//    @GetMapping("/me")
-//    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
-//        Map<Object, Object> model = new HashMap<>();
-//        model.put("username", userDetails.getUsername());
-//        model.put("roles", userDetails.getAuthorities()
-//                .stream()
-//                .map(a -> ((GrantedAuthority) a).getAuthority())
-//                .collect(toList())
-//        );
-//        return ok(model);
-//    }
+    @GetMapping("/me")
+    public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        Map<Object, Object> model = new HashMap<>();
+        model.put("username", userDetails.getUsername());
+        model.put("roles", userDetails.getAuthorities()
+                .stream()
+                .map(a -> ((GrantedAuthority) a).getAuthority())
+                .collect(toList())
+        );
+        return ok(model);
+    }
 
     @GetMapping(path = "/contractor", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Contractor> login(@RequestBody Contractor contractor) {
@@ -81,6 +85,21 @@ public class LoginController {
             return new ResponseEntity<>(contractorAuthenticatedResponse, HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(contractor, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(path = "/admin", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Admin> loginAdmin(@RequestBody Admin admin) {
+        String username = admin.getUsername();
+        String password = admin.getPassword();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        Admin foundAdmin = adminRepository.findByUsername(username);
+        if (foundAdmin != null) {
+            String token = jwtTokenProvider.createToken(username, adminRepository.findByUsername(username).getRoles());
+            AdminAuthenticatedResponse contractorAuthenticatedResponse = new AdminAuthenticatedResponse(foundAdmin, token);
+            return new ResponseEntity<>(contractorAuthenticatedResponse, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(admin, HttpStatus.NOT_FOUND);
         }
     }
 }

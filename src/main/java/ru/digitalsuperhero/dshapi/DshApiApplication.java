@@ -1,24 +1,38 @@
 package ru.digitalsuperhero.dshapi;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.digitalsuperhero.dshapi.dao.AdminRepository;
 import ru.digitalsuperhero.dshapi.dao.ContractorRepository;
 import ru.digitalsuperhero.dshapi.dao.CustomerRepository;
 import ru.digitalsuperhero.dshapi.dao.WorkRequestRepository;
-import ru.digitalsuperhero.dshapi.dao.domain.Contractor;
-import ru.digitalsuperhero.dshapi.dao.domain.Customer;
-import ru.digitalsuperhero.dshapi.dao.domain.WorkRequest;
-import ru.digitalsuperhero.dshapi.dao.domain.WorkSpecialization;
+import ru.digitalsuperhero.dshapi.dao.domain.*;
 
 @SpringBootApplication
 //@ComponentScan({"ru.digitalsuperhero.dshapi"})
 public class DshApiApplication {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public static void main(String[] args) {
         SpringApplication.run(DshApiApplication.class, args);
+    }
+
+    @Bean
+    public CommandLineRunner adminLoader(AdminRepository adminRepository) {
+        return new CommandLineRunner() {
+            @Override
+            public void run(String... args) throws Exception {
+
+                adminRepository.save(new Admin("network", passwordEncoder.encode("network")));
+            }
+        };
     }
 
     @Bean

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import ru.digitalsuperhero.dshapi.security.UserRepositoryUserDetailsService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class JwtTokenProvider {
     private long validityInMilliseconds = 3600000; // 1h
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserRepositoryUserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {
@@ -41,11 +41,11 @@ public class JwtTokenProvider {
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()//
-            .setClaims(claims)//
-            .setIssuedAt(now)//
-            .setExpiration(validity)//
-            .signWith(SignatureAlgorithm.HS256, secretKey)//
-            .compact();
+                .setClaims(claims)//
+                .setIssuedAt(now)//
+                .setExpiration(validity)//
+                .signWith(SignatureAlgorithm.HS256, secretKey)//
+                .compact();
     }
 
     public Authentication getAuthentication(String token) {
