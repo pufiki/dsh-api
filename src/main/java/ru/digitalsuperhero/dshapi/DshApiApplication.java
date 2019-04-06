@@ -29,8 +29,9 @@ public class DshApiApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-
-                adminRepository.save(new Admin("network", passwordEncoder.encode("network")));
+                if (adminRepository.findByUsername("network") == null) {
+                    adminRepository.save(new Admin("network", passwordEncoder.encode("network")));
+                }
             }
         };
     }
