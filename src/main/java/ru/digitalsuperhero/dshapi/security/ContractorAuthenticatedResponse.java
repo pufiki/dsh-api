@@ -15,6 +15,5 @@ public class ContractorAuthenticatedResponse extends Contractor {
         super.setEmail(contractor.getEmail());
         super.setCompanyName(contractor.getEmail());
         super.setRating(contractor.getRating());
-        super.setWorkSpecialization(contractor.getWorkSpecialization());
     }
 }

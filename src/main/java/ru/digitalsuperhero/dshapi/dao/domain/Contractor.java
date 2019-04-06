@@ -25,7 +25,6 @@ public class Contractor implements UserDetails {
     private String companyName;
     private String email;
     private String password;
-    private WorkSpecialization workSpecialization;
     @OneToMany(targetEntity = CommercialOffer.class)
     private List<CommercialOffer> commercialOffers;
     /**
@@ -33,12 +32,11 @@ public class Contractor implements UserDetails {
      */
     private Double rating;
 
-    public Contractor(Long id, String companyName, String email, String password, WorkSpecialization workSpecialization) {
+    public Contractor(Long id, String companyName, String email, String password) {
         this.id = id;
         this.companyName = companyName;
         this.email = email;
         this.password = password;
-        this.workSpecialization = workSpecialization;
     }
 
     public List<String> getRoles() {

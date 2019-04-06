@@ -13,6 +13,9 @@ import ru.digitalsuperhero.dshapi.dao.CustomerRepository;
 import ru.digitalsuperhero.dshapi.dao.WorkRequestRepository;
 import ru.digitalsuperhero.dshapi.dao.domain.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @SpringBootApplication
 //@ComponentScan({"ru.digitalsuperhero.dshapi"})
 public class DshApiApplication {
@@ -58,11 +61,12 @@ public class DshApiApplication {
                 customerRepository.save(new Customer("test13", "test13@gmail.com", "test", 0l));
                 customerRepository.save(new Customer("test14", "test14@gmail.com", "test", 0l));
 
-                contractorRepository.save(new Contractor(0l, "test1", "test1@gmail.com", "test", WorkSpecialization.BANKS));
-                contractorRepository.save(new Contractor(1l, "test2", "test2@gmail.com", "test", WorkSpecialization.FIELDS));
-                contractorRepository.save(new Contractor(2l, "test3", "test3@gmail.com", "test", WorkSpecialization.HOUSES));
-                contractorRepository.save(new Contractor(3l, "test4", "test4@gmail.com", "test", WorkSpecialization.OFFICES));
-                contractorRepository.save(new Contractor(4l, "test5", "test5@gmail.com", "test", WorkSpecialization.FIELDS));
+                WorkSpecialization[] workSpecializations = new WorkSpecialization[]{WorkSpecialization.BANKS, WorkSpecialization.FIELDS};
+                contractorRepository.save(new Contractor(0l, "test1", "test1@gmail.com", "test"));
+                contractorRepository.save(new Contractor(1l, "test2", "test2@gmail.com", "test"));
+                contractorRepository.save(new Contractor(2l, "test3", "test3@gmail.com", "test"));
+                contractorRepository.save(new Contractor(3l, "test4", "test4@gmail.com", "test"));
+                contractorRepository.save(new Contractor(4l, "test5", "test5@gmail.com", "test"));
 
                 workRequestRepository.save(new WorkRequest(1l, "work1", "test", WorkSpecialization.FIELDS, false));
                 workRequestRepository.save(new WorkRequest(2l, "work2", "test", WorkSpecialization.BANKS, false));

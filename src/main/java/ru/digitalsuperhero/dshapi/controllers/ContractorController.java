@@ -59,9 +59,6 @@ public class ContractorController {
         if (contractor.getCompanyName() != null) {
             foundContractor.setCompanyName(contractor.getCompanyName());
         }
-        if (contractor.getWorkSpecialization() != null) {
-            foundContractor.setWorkSpecialization(contractor.getWorkSpecialization());
-        }
         if (contractor.getCommercialOffers() != null) {
             foundContractor.setCommercialOffers(contractor.getCommercialOffers());
         }
