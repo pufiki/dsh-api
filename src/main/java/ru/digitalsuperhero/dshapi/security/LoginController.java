@@ -26,7 +26,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/login")
-@CrossOrigin(origins = "http://pufiki.herokuapp.com")
+@CrossOrigin
 public class LoginController {
 
     @Autowired
