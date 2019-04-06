@@ -48,7 +48,7 @@ public class LoginController {
         this.adminRepository = adminRepository;
     }
 
-    @GetMapping(path = "/customer", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/customer", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Customer> loginCustomer(@RequestBody Customer customerAuthenticationRequest) {
         String username = customerAuthenticationRequest.getEmail();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(customerAuthenticationRequest.getEmail(), customerAuthenticationRequest.getPassword()));
@@ -74,7 +74,7 @@ public class LoginController {
         return ok(model);
     }
 
-    @GetMapping(path = "/contractor", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/contractor", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Contractor> login(@RequestBody Contractor contractor) {
         String username = contractor.getEmail();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(contractor.getEmail(), contractor.getPassword()));
@@ -88,7 +88,7 @@ public class LoginController {
         }
     }
 
-    @GetMapping(path = "/admin", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/admin", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Admin> loginAdmin(@RequestBody Admin admin) {
         String username = admin.getUsername();
         String password = admin.getPassword();
