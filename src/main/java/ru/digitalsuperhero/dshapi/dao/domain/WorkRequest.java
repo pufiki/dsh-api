@@ -20,16 +20,15 @@ public class WorkRequest {
     private String name;
     private String description;
     private Date createdAt;
-    private WorkSpecialization workSpecialization;
+    private String imageUrl;
     @OneToMany(targetEntity = CommercialOffer.class)
     private List<CommercialOffer> commercialOffers;
     private Boolean isClosed;
 
-    public WorkRequest(Long id, String name, String description, WorkSpecialization workSpecialization, Boolean isClosed) {
+    public WorkRequest(Long id, String name, String description, Boolean isClosed) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.workSpecialization = workSpecialization;
         this.isClosed = isClosed;
     }
 

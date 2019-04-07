@@ -66,8 +66,8 @@ public class WorkRequestController {
         if (workRequest.getDescription() != null) {
             foundWorkRequest.setDescription(workRequest.getDescription());
         }
-        if (workRequest.getWorkSpecialization() != null) {
-            foundWorkRequest.setWorkSpecialization(workRequest.getWorkSpecialization());
+        if (workRequest.getImageUrl() != null) {
+            foundWorkRequest.setImageUrl(workRequest.getImageUrl());
         }
         if (workRequest.getCommercialOffers() != null) {
             foundWorkRequest.setCommercialOffers(workRequest.getCommercialOffers());
