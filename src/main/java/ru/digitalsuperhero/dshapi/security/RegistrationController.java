@@ -57,7 +57,8 @@ public class RegistrationController {
         return new ResponseEntity<>(foundContractor, HttpStatus.CONFLICT);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/customer", consumes = "application/json") //post mapping
+    @PostMapping(path = "/customer", consumes = "application/json") //post mapping
+    @CrossOrigin(origins = {"https://pufiki.herokuapp.com", "http://pufiki.herokuapp.com", "http://localhost:3000"})
     public ResponseEntity<Customer> processRegistration(@RequestBody Customer customer) {
         String password = generatePassword(3);
         customer.setPassword(passwordEncoder.encode(password));
