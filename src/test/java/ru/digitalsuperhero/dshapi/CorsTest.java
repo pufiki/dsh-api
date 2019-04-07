@@ -9,6 +9,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.digitalsuperhero.dshapi.dao.AdminRepository;
 import ru.digitalsuperhero.dshapi.dao.domain.Admin;
+import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 
 import java.net.URI;
 
@@ -33,6 +34,20 @@ public class CorsTest {
                 Admin.class);
 
         assertEquals(HttpStatus.ACCEPTED, entity.getStatusCode());
+        assertEquals("http://localhost:3000", entity.getHeaders().getAccessControlAllowOrigin());
+    }
+
+    @Test
+    public void corsCustomer() throws Exception {
+        ResponseEntity<Customer> entity = this.restTemplate.exchange(
+                RequestEntity
+                        .post(uri("/register/customer"))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.ORIGIN, "http://localhost:3000")
+                        .body(new Customer("test3", "test3@gmail.com", "+79991234567", "test")),
+                Customer.class);
+
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
         assertEquals("http://localhost:3000", entity.getHeaders().getAccessControlAllowOrigin());
     }
 

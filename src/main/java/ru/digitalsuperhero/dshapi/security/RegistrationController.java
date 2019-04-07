@@ -13,17 +13,20 @@ import ru.digitalsuperhero.dshapi.dao.CustomerRepository;
 import ru.digitalsuperhero.dshapi.dao.domain.Contractor;
 import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 
-import java.nio.charset.Charset;
+import java.security.SecureRandom;
 import java.util.Random;
 
 @RestController
 @RequestMapping("/register")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class RegistrationController {
 
     private static final String ACCOUNT_SID = "AC10dd163c86bc363f0623bfafa9ab2c8b";
     private static final String AUTH_TOKEN = "791e79bf0da449d828901cf993ebc66f";
     private static final String fromNumber = "+17868286905";
+
+    private static final Random RANDOM = new SecureRandom();
+    private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     private CustomerRepository customerRepo;
     private ContractorRepository contractorRepo;
@@ -36,6 +39,14 @@ public class RegistrationController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public static String generatePassword(int length) {
+        StringBuilder returnValue = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
+        }
+        return new String(returnValue);
+    }
+
     @PostMapping(path = "/contractor", consumes = "application/json")
     public ResponseEntity<Contractor> processRegistration(@RequestBody Contractor contractor) {
         contractor.setPassword(passwordEncoder.encode(contractor.getPassword()));
@@ -46,9 +57,9 @@ public class RegistrationController {
         return new ResponseEntity<>(foundContractor, HttpStatus.CONFLICT);
     }
 
-    @PostMapping(path = "/customer", consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, path = "/customer", consumes = "application/json") //post mapping
     public ResponseEntity<Customer> processRegistration(@RequestBody Customer customer) {
-        String password = generateRandomStrongPassword();
+        String password = generatePassword(3);
         customer.setPassword(passwordEncoder.encode(password));
         Customer foundCustomer = customerRepo.findByEmail(customer.getEmail());
         if (foundCustomer == null) {
@@ -65,12 +76,5 @@ public class RegistrationController {
                 "Почта: " + customer.getEmail() +
                         ". Автоматически сгенерированный пароль (его знаете только вы): " + customer.getPassword() + " .").create();
         System.out.println("=======>>> sent " + message.getDateSent());
-    }
-
-    private String generateRandomStrongPassword() {
-        byte[] array = new byte[2]; // length is bounded by 7
-        new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
-        return generatedString;
     }
 }
