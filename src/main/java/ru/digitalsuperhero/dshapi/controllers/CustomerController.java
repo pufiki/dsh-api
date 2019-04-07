@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @RepositoryRestController
-@CrossOrigin(origins = "*") //?
+//@CrossOrigin(origins = "*") //?
 @RestController
 public class CustomerController {
     private CustomerRepository customerRepository;

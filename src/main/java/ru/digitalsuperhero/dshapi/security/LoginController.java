@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/login")
-@CrossOrigin
+//@CrossOrigin(origins = "*")
 public class LoginController {
 
     @Autowired
@@ -71,23 +71,23 @@ public class LoginController {
                 .collect(toList())
         );
         ResponseEntity<Map<Object, Object>> responseEntity = new ResponseEntity(model, HttpStatus.OK);
-        responseEntity.getHeaders().set("Access-Control-Allow-Origin", "*");
-        responseEntity.getHeaders().set("Access-Control-Allow-Methods", "GET");
-        responseEntity.getHeaders().set("Access-Control-Max-Age", "3600");
-        responseEntity.getHeaders().set("Access-Control-Allow-Headers",
-                "Access-Control-Allow-Headers, " +
-                        "Access-Control-Allow-Origin, " +
-                        "Access-Content-Allow-Origin, " +
-                        "Access-Control-Allow-Credentials, " +
-                        "Access-Control-Allow-Methods, " +
-                        "x-requested-with, " +
-                        "authorization, " +
-                        "Content-Type, " +
-                        "Authorization, " +
-                        "credential, " +
-                        "X-XSRF-TOKEN, " +
-                        "responseType");
-        responseEntity.getHeaders().set("Access-Control-Allow-Credentials", "true");
+//        responseEntity.getHeaders().set("Access-Control-Allow-Origin", "*");
+//        responseEntity.getHeaders().set("Access-Control-Allow-Methods", "GET");
+//        responseEntity.getHeaders().set("Access-Control-Max-Age", "3600");
+//        responseEntity.getHeaders().set("Access-Control-Allow-Headers",
+//                "Access-Control-Allow-Headers, " +
+//                        "Access-Control-Allow-Origin, " +
+//                        "Access-Content-Allow-Origin, " +
+//                        "Access-Control-Allow-Credentials, " +
+//                        "Access-Control-Allow-Methods, " +
+//                        "x-requested-with, " +
+//                        "authorization, " +
+//                        "Content-Type, " +
+//                        "Authorization, " +
+//                        "credential, " +
+//                        "X-XSRF-TOKEN, " +
+//                        "responseType");
+//        responseEntity.getHeaders().set("Access-Control-Allow-Credentials", "true");
         return responseEntity;
     }
 
@@ -105,7 +105,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping(path = "/admin", consumes = "application/json", produces = "application/json")
+    @RequestMapping(path = "/admin", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Admin> loginAdmin(@RequestBody Admin admin) {
         String username = admin.getUsername();
         String password = admin.getPassword();
@@ -119,23 +119,6 @@ public class LoginController {
         } else {
             responseEntity = new ResponseEntity<>(admin, HttpStatus.NOT_FOUND);
         }
-        responseEntity.getHeaders().set("Access-Control-Allow-Origin", "*");
-        responseEntity.getHeaders().set("Access-Control-Allow-Methods", "POST");
-        responseEntity.getHeaders().set("Access-Control-Max-Age", "3600");
-        responseEntity.getHeaders().set("Access-Control-Allow-Headers",
-                "Access-Control-Allow-Headers, " +
-                        "Access-Control-Allow-Origin, " +
-                        "Access-Content-Allow-Origin, " +
-                        "Access-Control-Allow-Credentials, " +
-                        "Access-Control-Allow-Methods, " +
-                        "x-requested-with, " +
-                        "authorization, " +
-                        "Content-Type, " +
-                        "Authorization, " +
-                        "credential, " +
-                        "X-XSRF-TOKEN, " +
-                        "responseType");
-        responseEntity.getHeaders().set("Access-Control-Allow-Credentials", "true");
         return responseEntity;
     }
 }
