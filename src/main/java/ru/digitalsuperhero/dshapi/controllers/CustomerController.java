@@ -1,5 +1,8 @@
 package ru.digitalsuperhero.dshapi.controllers;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -11,17 +14,35 @@ import org.springframework.web.bind.annotation.*;
 import ru.digitalsuperhero.dshapi.dao.CustomerRepository;
 import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.List;
+import java.util.Random;
 
 
 @RepositoryRestController
 //@CrossOrigin(origins = "*") //?
 @RestController
 public class CustomerController {
+    private static final String ACCOUNT_SID = "AC10dd163c86bc363f0623bfafa9ab2c8b";
+    private static final String AUTH_TOKEN = "791e79bf0da449d828901cf993ebc66f";
+    private static final String fromNumber = "+17868286905";
+
+    private static final Random RANDOM = new SecureRandom();
+    private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
     private CustomerRepository customerRepository;
 
     public CustomerController(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+    }
+
+    public static String generatePassword(int length) {
+        StringBuilder returnValue = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            returnValue.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
+        }
+        return new String(returnValue);
     }
 
     @GetMapping(path = "/customers", produces = "application/json")
@@ -71,6 +92,41 @@ public class CustomerController {
         try {
             customerRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+        }
+    }
+
+    @PostMapping(path = "/register", consumes = "application/json")
+    public ResponseEntity<Customer> processRegistration(@RequestBody Customer customer) {
+        String password = generatePassword(3);
+        String encodedPassword = Base64.getEncoder().encodeToString(password.getBytes());
+        customer.setPassword(encodedPassword);
+        Customer foundCustomer = customerRepository.findByEmail(customer.getEmail());
+        if (foundCustomer == null) {
+            sendSmsToCustomer(customer, password);
+            return new ResponseEntity<>(customerRepository.save(customer), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(foundCustomer, HttpStatus.CONFLICT);
+    }
+
+    private void sendSmsToCustomer(Customer customer, String password) {
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        Message message = Message.creator(new PhoneNumber(customer.getPhoneNumber()),
+                new PhoneNumber(fromNumber),
+                "Почта: " + customer.getEmail() +
+                        ". Автоматически сгенерированный пароль (его знаете только вы): " + customer.getPassword() + " .").create();
+        System.out.println("=======>>> sent " + message.getDateSent());
+    }
+
+    @PostMapping(path = "/signin", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Customer> login(@RequestBody Customer customer) {
+        Customer foundCustomer = customerRepository.findByEmail(customer.getEmail());
+        byte[] foundContractorDecodedBytes = Base64.getDecoder().decode(foundCustomer.getPassword());
+        String decodedFounderPassword = new String(foundContractorDecodedBytes);
+        if (foundCustomer != null && customer.getPassword().equals(decodedFounderPassword)) {
+            foundCustomer.setSignedIn(true);
+            return new ResponseEntity<>(foundCustomer, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(customer, HttpStatus.NOT_FOUND);
         }
     }
 }

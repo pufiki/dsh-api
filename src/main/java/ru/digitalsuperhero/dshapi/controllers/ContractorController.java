@@ -1,5 +1,8 @@
 package ru.digitalsuperhero.dshapi.controllers;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -10,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.digitalsuperhero.dshapi.dao.ContractorRepository;
 import ru.digitalsuperhero.dshapi.dao.domain.Contractor;
+import ru.digitalsuperhero.dshapi.dao.domain.Customer;
 
+import java.util.Base64;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -20,7 +25,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RequestMapping(path = "/contractors")
 @CrossOrigin(origins = "*")
 public class ContractorController {
-
     private ContractorRepository contractorRepository;
 
     public ContractorController(ContractorRepository contractorRepository) {
@@ -71,6 +75,30 @@ public class ContractorController {
         try {
             contractorRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+        }
+    }
+
+    @PostMapping(path = "/register", consumes = "application/json")
+    public ResponseEntity<Contractor> processRegistration(@RequestBody Contractor contractor) {
+        String encodedPassword = Base64.getEncoder().encodeToString(contractor.getPassword().getBytes());
+        contractor.setPassword(encodedPassword);
+        Contractor foundContractor = contractorRepository.findByEmail(contractor.getEmail());
+        if (foundContractor == null) {
+            return new ResponseEntity<>(contractorRepository.save(contractor), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(foundContractor, HttpStatus.CONFLICT);
+    }
+
+    @PostMapping(path = "/signin", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Contractor> login(@RequestBody Contractor contractor) {
+        Contractor foundContractor = contractorRepository.findByEmail(contractor.getEmail());
+        byte[] foundContractorDecodedBytes = Base64.getDecoder().decode(foundContractor.getPassword());
+        String decodedFounderPassword = new String(foundContractorDecodedBytes);
+        if (foundContractor != null && contractor.getPassword().equals(decodedFounderPassword)) {
+            foundContractor.setSignedIn(true);
+            return new ResponseEntity<>(foundContractor, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(contractor, HttpStatus.NOT_FOUND);
         }
     }
 }
