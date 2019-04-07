@@ -29,14 +29,10 @@ public class CustomerController {
         PageRequest pageRequest =
                 PageRequest.of(0, 6, Sort.by("id").descending());
         List<Customer> allCustomers = customerRepository.findAll(pageRequest).getContent();
-
         List<CustomerResource> customerResources =
                 new CustomerResourceAssembler().toResources(allCustomers);
         Resources<CustomerResource> recentResources =
                 new Resources<CustomerResource>(customerResources);
-//        recentResources.add(
-//                linkTo(methodOn(CustomerController.class).getCustomers())
-//                        .withRel("recents"));
         return recentResources;
     }
 
