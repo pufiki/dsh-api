@@ -21,15 +21,22 @@ public class WorkRequest {
     private String description;
     private Date createdAt;
     private String imageUrl;
-    @OneToMany(targetEntity = CommercialOffer.class)
-    private List<CommercialOffer> commercialOffers;
+    @OneToOne(targetEntity = Customer.class)
+    private Customer customer;
     private Boolean isClosed;
+    private Integer state;
+    @OneToOne
+    private Discussion discussion;
+    @OneToOne
+    private Contractor contractor;
 
-    public WorkRequest(Long id, String name, String description, Boolean isClosed) {
+    public WorkRequest(Long id, String name, String description, Boolean isClosed, Customer customer, Integer state) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.isClosed = isClosed;
+        this.customer = customer;
+        this.state = state;
     }
 
     @PrePersist

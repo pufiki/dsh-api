@@ -46,20 +46,23 @@ public class DshApiApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                customerRepository.save(new Customer("test1", "test1@gmail.com", "+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test2", "test2@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test3", "test3@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test4", "test4@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test5", "test5@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test6", "test6@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test7", "test7@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test8", "test8@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test9", "test9@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test10", "tes10@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test11", "test11@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test12", "test12@gmail.com", "+79991234567","test", 0l));
-                customerRepository.save(new Customer("test13", "test13@gmail.com","+79991234567", "test", 0l));
-                customerRepository.save(new Customer("test14", "test14@gmail.com","+79991234567", "test", 0l));
+                Customer customer1 = new Customer("test1", "test1@gmail.com", "+79991234567", "test");
+                Customer customer2 =   new Customer("test2", "test2@gmail.com","+79991234567", "test");
+                Customer customer3 = new Customer("test3", "test3@gmail.com","+79991234567", "test");
+                customerRepository.save(customer1);
+                customerRepository.save(customer2);
+                customerRepository.save(customer3);
+                customerRepository.save(new Customer("test4", "test4@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test5", "test5@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test6", "test6@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test7", "test7@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test8", "test8@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test9", "test9@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test10", "tes10@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test11", "test11@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test12", "test12@gmail.com", "+79991234567","test"));
+                customerRepository.save(new Customer("test13", "test13@gmail.com","+79991234567", "test"));
+                customerRepository.save(new Customer("test14", "test14@gmail.com","+79991234567", "test"));
 
                 contractorRepository.save(new Contractor(0l, "test1", "test1@gmail.com", "test"));
                 contractorRepository.save(new Contractor(1l, "test2", "test2@gmail.com", "test"));
@@ -67,11 +70,9 @@ public class DshApiApplication {
                 contractorRepository.save(new Contractor(3l, "test4", "test4@gmail.com", "test"));
                 contractorRepository.save(new Contractor(4l, "test5", "test5@gmail.com", "test"));
 
-                workRequestRepository.save(new WorkRequest(1l, "work1", "test", false));
-                workRequestRepository.save(new WorkRequest(2l, "work2", "test", false));
-                workRequestRepository.save(new WorkRequest(3l, "work3", "test", false));
-                workRequestRepository.save(new WorkRequest(4l, "work4", "test", false));
-                workRequestRepository.save(new WorkRequest(5l, "work5", "test", false));
+                workRequestRepository.save(new WorkRequest(1l, "work1", "test", false, customer1, 1));
+                workRequestRepository.save(new WorkRequest(2l, "work2", "test", false, customer2, 2));
+                workRequestRepository.save(new WorkRequest(3l, "work3", "test", false, customer3, 3));
             }
         };
     }

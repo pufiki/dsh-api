@@ -59,8 +59,8 @@ public class ContractorController {
         if (contractor.getCompanyName() != null) {
             foundContractor.setCompanyName(contractor.getCompanyName());
         }
-        if (contractor.getCommercialOffers() != null) {
-            foundContractor.setCommercialOffers(contractor.getCommercialOffers());
+        if (contractor.getWorkRequests() != null) {
+            foundContractor.setWorkRequests(contractor.getWorkRequests());
         }
         return new ResponseEntity<>(contractorRepository.save(foundContractor), HttpStatus.ACCEPTED);
     }

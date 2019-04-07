@@ -22,16 +22,17 @@ public class Customer implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String companyName;
+    private String name;
     private String email;
+    private String description;
     private String phoneNumber;
     private String password;
+    private String photoUrl;
     @OneToMany(targetEntity = WorkRequest.class)
     private List<WorkRequest> workRequestsCreated;
 
-    public Customer(String companyName, String email, String phoneNumber, String password, Long id) {
-        this.companyName = companyName;
-        this.id = id;
+    public Customer(String name, String email, String phoneNumber, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;

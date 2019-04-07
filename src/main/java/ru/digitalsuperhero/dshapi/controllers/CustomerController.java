@@ -56,8 +56,8 @@ public class CustomerController {
         if (customerPatch.getPhoneNumber() != null) {
             foundCustomer.setPhoneNumber(customerPatch.getPhoneNumber());
         }
-        if (customerPatch.getCompanyName() != null) {
-            foundCustomer.setCompanyName(customerPatch.getCompanyName());
+        if (customerPatch.getName() != null) {
+            foundCustomer.setName(customerPatch.getName());
         }
         if (customerPatch.getWorkRequestsCreated() != null) {
             foundCustomer.setWorkRequestsCreated(customerPatch.getWorkRequestsCreated());

@@ -69,8 +69,23 @@ public class WorkRequestController {
         if (workRequest.getImageUrl() != null) {
             foundWorkRequest.setImageUrl(workRequest.getImageUrl());
         }
-        if (workRequest.getCommercialOffers() != null) {
-            foundWorkRequest.setCommercialOffers(workRequest.getCommercialOffers());
+        if (workRequest.getCreatedAt() != null) {
+            foundWorkRequest.setCreatedAt(workRequest.getCreatedAt());
+        }
+        if (workRequest.getIsClosed() != null) {
+            foundWorkRequest.setIsClosed(workRequest.getIsClosed());
+        }
+        if (workRequest.getState() != null) {
+            foundWorkRequest.setState(workRequest.getState());
+        }
+        if (workRequest.getDiscussion() != null) {
+            foundWorkRequest.setDiscussion(workRequest.getDiscussion());
+        }
+        if (workRequest.getCustomer() != null) {
+            foundWorkRequest.setCustomer(workRequest.getCustomer());
+        }
+        if (workRequest.getContractor() != null) {
+            foundWorkRequest.setContractor(workRequest.getContractor());
         }
         return new ResponseEntity<>(workRequestRepository.save(foundWorkRequest), HttpStatus.ACCEPTED);
     }

@@ -11,7 +11,7 @@ public class CustomerAuthenticatedResponse extends Customer {
         this.token = token;
         super.setId(customer.getId());
         super.setPassword(customer.getPassword());
-        super.setCompanyName(customer.getCompanyName());
+        super.setName(customer.getName());
         super.setEmail(customer.getEmail());
         super.setWorkRequestsCreated(customer.getWorkRequestsCreated());
     }

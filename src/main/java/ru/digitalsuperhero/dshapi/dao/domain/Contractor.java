@@ -25,8 +25,10 @@ public class Contractor implements UserDetails {
     private String companyName;
     private String email;
     private String password;
-    @OneToMany(targetEntity = CommercialOffer.class)
-    private List<CommercialOffer> commercialOffers;
+    @OneToMany(targetEntity = WorkRequest.class)
+    private List<WorkRequest> workRequests;
+    @OneToMany
+    List<Review> reviews;
     /**
      * Contractor rating stars from 1.0 to 5.0 based on proposed and executed commercial offers.
      */

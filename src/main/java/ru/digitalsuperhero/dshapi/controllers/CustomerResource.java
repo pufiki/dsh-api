@@ -20,7 +20,7 @@ public class CustomerResource extends ResourceSupport {
     private List<WorkRequest> workRequestsCreated;
 
     public CustomerResource(Customer customer) {
-        this.companyName = customer.getCompanyName();
+        this.companyName = customer.getName();
         this.email = customer.getEmail();
         this.password = customer.getPassword();
         this.workRequestsCreated = customer.getWorkRequestsCreated();

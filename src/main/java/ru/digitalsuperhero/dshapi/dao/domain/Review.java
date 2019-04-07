@@ -11,7 +11,6 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String title;
     private String description;
     /**
      * Rating stars from 1 to 5.
