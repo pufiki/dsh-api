@@ -46,20 +46,20 @@ public class DshApiApplication {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                customerRepository.save(new Customer("test1", "test1@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test2", "test2@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test3", "test3@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test4", "test4@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test5", "test5@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test6", "test6@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test7", "test7@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test8", "test8@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test9", "test9@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test10", "tes10@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test11", "test11@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test12", "test12@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test13", "test13@gmail.com", "test", 0l));
-                customerRepository.save(new Customer("test14", "test14@gmail.com", "test", 0l));
+                customerRepository.save(new Customer("test1", "test1@gmail.com", "+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test2", "test2@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test3", "test3@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test4", "test4@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test5", "test5@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test6", "test6@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test7", "test7@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test8", "test8@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test9", "test9@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test10", "tes10@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test11", "test11@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test12", "test12@gmail.com", "+79991234567","test", 0l));
+                customerRepository.save(new Customer("test13", "test13@gmail.com","+79991234567", "test", 0l));
+                customerRepository.save(new Customer("test14", "test14@gmail.com","+79991234567", "test", 0l));
 
                 contractorRepository.save(new Contractor(0l, "test1", "test1@gmail.com", "test"));
                 contractorRepository.save(new Contractor(1l, "test2", "test2@gmail.com", "test"));

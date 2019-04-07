@@ -24,15 +24,17 @@ public class Customer implements UserDetails {
     private Long id;
     private String companyName;
     private String email;
+    private String phoneNumber;
     private String password;
     @OneToMany(targetEntity = WorkRequest.class)
     private List<WorkRequest> workRequestsCreated;
 
-    public Customer(String companyName, String email, String password, Long id) {
+    public Customer(String companyName, String email, String phoneNumber, String password, Long id) {
         this.companyName = companyName;
         this.id = id;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
     }
 
 

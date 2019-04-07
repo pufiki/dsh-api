@@ -57,6 +57,9 @@ public class CustomerController {
         if (customerPatch.getEmail() != null) {
             foundCustomer.setEmail(customerPatch.getEmail());
         }
+        if (customerPatch.getPhoneNumber() != null) {
+            foundCustomer.setPhoneNumber(customerPatch.getPhoneNumber());
+        }
         if (customerPatch.getCompanyName() != null) {
             foundCustomer.setCompanyName(customerPatch.getCompanyName());
         }
