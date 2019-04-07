@@ -6,7 +6,6 @@ import com.twilio.type.PhoneNumber;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,9 @@ import java.util.List;
 import java.util.Random;
 
 
-@RepositoryRestController
-//@CrossOrigin(origins = "*") //?
+@CrossOrigin(origins = "*")
 @RestController
+@RequestMapping(path = "/customers")
 public class CustomerController {
     private static final String ACCOUNT_SID = "AC10dd163c86bc363f0623bfafa9ab2c8b";
     private static final String AUTH_TOKEN = "791e79bf0da449d828901cf993ebc66f";
@@ -45,7 +44,7 @@ public class CustomerController {
         return new String(returnValue);
     }
 
-    @GetMapping(path = "/customers", produces = "application/json")
+    @GetMapping(produces = "application/json")
     public Resources<CustomerResource> getCustomers() {
         PageRequest pageRequest =
                 PageRequest.of(0, 6, Sort.by("id").descending());
@@ -57,7 +56,7 @@ public class CustomerController {
         return recentResources;
     }
 
-    @PutMapping(path = "customers/{id}", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Customer> putCustomer(@PathVariable("id") Long id, @RequestBody Customer customer) {
         Customer foundCustomer = customerRepository.findById(id).get();
         customerRepository.delete(foundCustomer);
@@ -65,7 +64,7 @@ public class CustomerController {
         return new ResponseEntity<>(customerRepository.save(customer), HttpStatus.ACCEPTED);
     }
 
-    @PatchMapping(path = "customers/{id}", consumes = "application/json", produces = "application/json")
+    @PatchMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Customer> patchCustomer(@PathVariable("id") Long id, @RequestBody Customer customerPatch) {
         Customer foundCustomer = customerRepository.findById(id).get();
         if (customerPatch.getPassword() != null) {
@@ -86,7 +85,7 @@ public class CustomerController {
         return new ResponseEntity<>(customerRepository.save(foundCustomer), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(path = "customers/{id}")
+    @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCustomer(@PathVariable("id") Long id) {
         try {
